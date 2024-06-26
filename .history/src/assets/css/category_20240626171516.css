@@ -1,0 +1,13 @@
+.add {
+    width: 100px;
+    height: 40px;
+    background-color: #97b093;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    margin-top: 3px;
+    
+
+}

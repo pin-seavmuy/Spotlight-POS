@@ -1,0 +1,9 @@
+.add {
+    width: 100px;
+    height: 30px;
+    background-color: #97b093;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+
+}
