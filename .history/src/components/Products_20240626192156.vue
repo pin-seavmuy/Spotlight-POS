@@ -71,7 +71,6 @@
                 <th>Color</th>
                 <th>Size</th>
                 <th>price/Unit</th>
-                <th>Stocking</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -87,7 +86,7 @@
                 <td>{{ order.color }}</td>
                 <td>{{ order.size }}</td>
                 <td>{{ order.price }}</td>
-                <td>{{ order.stocking }}</td>
+                <td>{{ order.price }}</td>
                 <td class="action">
                   <font-awesome-icon :icon="icons.edit" class="icon action-icon" @click="editOrder(order.id)" />
                   <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteOrder(order.id)" />

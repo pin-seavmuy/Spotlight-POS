@@ -66,12 +66,8 @@
                 <th>No</th>
                 <th>P_ID</th>
                 <th>Image</th>
-                <th>Product</th>
+                
                 <th>Category</th>
-                <th>Color</th>
-                <th>Size</th>
-                <th>price/Unit</th>
-                <th>Stocking</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -82,12 +78,7 @@
                 <td>
                   <img :src="require(`../assets/img/${order.image}`)" alt="Product Image" width="50" height="50" />
                 </td>
-                <td>{{ order.product }}</td>
                 <td>{{ order.category }}</td>
-                <td>{{ order.color }}</td>
-                <td>{{ order.size }}</td>
-                <td>{{ order.price }}</td>
-                <td>{{ order.stocking }}</td>
                 <td class="action">
                   <font-awesome-icon :icon="icons.edit" class="icon action-icon" @click="editOrder(order.id)" />
                   <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteOrder(order.id)" />
@@ -127,9 +118,9 @@
           plus: faPlus,
         },
         orders: [
-          { id: 1, productID: 'C0001', image: 'people.png', product: 'Flower Dress',  category: "Dress", color: "N/A", size: "Free", price: "$15.00", },
-          { id: 2, productID: 'C0002',  image: 'people.png', product: 'Prada', category: "Hoodie",  color: "Gray", size: "M", price: "$25.00", },
-          { id: 3, productID: 'C0003', image: 'people.png', product: 'Beyoncé', category: "T-shirt",  color: "Black", size: "L", price: "$20.00",  },
+          { id: 1, productID: 'C0001', image: 'people.png', category: "Dress" },
+          { id: 2, productID: 'C0002',  image: 'people.png', category: "Hoodie" },
+          { id: 3, productID: 'C0003', image: 'people.png', category: "T-shirt" },
         ],
       };
     },

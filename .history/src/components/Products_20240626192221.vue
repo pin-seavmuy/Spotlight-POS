@@ -71,7 +71,7 @@
                 <th>Color</th>
                 <th>Size</th>
                 <th>price/Unit</th>
-                <th>Stocking</th>
+                <th>price/Unit</th>
                 <th>Action</th>
               </tr>
             </thead>
