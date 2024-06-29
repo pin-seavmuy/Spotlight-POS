@@ -80,7 +80,7 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ order.productID }}</td>
                 <td>
-                  <img :src="require(`../assets/img/${order.image}`)" alt="Product Image" width="50" height="60" />
+                  <img :src="require(`../assets/img/${order.image}`)" alt="Product Image" width="50" height="50" />
                 </td>
                 <td>{{ order.product }}</td>
                 <td>{{ order.category }}</td>
@@ -129,7 +129,7 @@
         orders: [
           { id: 1, productID: 'C0001', image: '1.webp', product: 'Flower Dress',  category: "Dress", color: "N/A", size: "Free", price: "$15.00", },
           { id: 2, productID: 'C0002',  image: 'red.webp', product: 'Prada', category: "Hoodie",  color: "Gray", size: "M", price: "$25.00", },
-          { id: 3, productID: 'C0003', image: 'rhude.webp', product: 'Beyoncé', category: "T-shirt",  color: "Black", size: "L", price: "$20.00",  },
+          { id: 3, productID: 'C0003', image: 'people.png', product: 'Beyoncé', category: "T-shirt",  color: "Black", size: "L", price: "$20.00",  },
         ],
       };
     },
@@ -151,7 +151,7 @@
     display: flex;
     justify-content: center;
     gap: 40px;
-    padding: 35px;
+    padding: 15px;
     /* border-width: 0.1; */
   }
 

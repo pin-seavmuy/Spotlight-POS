@@ -7,7 +7,7 @@ import CategoryPage from '../components/Category.vue';
 import ProductPage from '../components/Products.vue'; 
 import CustomersPage from '../components/Customers.vue'; 
 import AddCategory from '../components/AddCategory.vue'; 
-import AddProduct from '../components/AddProduct.vue'; 
+import AddProduct from '../components/Ad.vue'; 
 
 
 const routes = [
@@ -18,7 +18,6 @@ const routes = [
   { path: '/products', component: ProductPage },
   { path: '/customers', component: CustomersPage },
   { path: '/add-category', component: AddCategory },
-  { path: '/add-product', component: AddProduct },
 ];
 
 const router = createRouter({

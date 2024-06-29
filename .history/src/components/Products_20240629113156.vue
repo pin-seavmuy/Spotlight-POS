@@ -151,7 +151,7 @@
     display: flex;
     justify-content: center;
     gap: 40px;
-    padding: 35px;
+    padding: 15px;
     /* border-width: 0.1; */
   }
 

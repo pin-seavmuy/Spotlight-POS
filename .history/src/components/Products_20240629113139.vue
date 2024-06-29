@@ -80,7 +80,7 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ order.productID }}</td>
                 <td>
-                  <img :src="require(`../assets/img/${order.image}`)" alt="Product Image" width="50" height="60" />
+                  <img :src="require(`../assets/img/${order.image}`)" alt="Product Image" width="50" height="50" />
                 </td>
                 <td>{{ order.product }}</td>
                 <td>{{ order.category }}</td>
@@ -151,7 +151,7 @@
     display: flex;
     justify-content: center;
     gap: 40px;
-    padding: 35px;
+    padding: 15px;
     /* border-width: 0.1; */
   }
 

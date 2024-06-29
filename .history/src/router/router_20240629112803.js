@@ -18,7 +18,6 @@ const routes = [
   { path: '/products', component: ProductPage },
   { path: '/customers', component: CustomersPage },
   { path: '/add-category', component: AddCategory },
-  { path: '/add-product', component: AddProduct },
 ];
 
 const router = createRouter({
