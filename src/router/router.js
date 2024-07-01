@@ -11,14 +11,20 @@ import AddProduct from '../components/AddProduct.vue';
 
 
 const routes = [
-  { path: '/', component: AdminDashboard },
+  { path: '/dashboard', component: AdminDashboard },
   { path: '/orders', component: OrdersPage },
   { path: '/sold', component: SoldOut },
   { path: '/category', component: CategoryPage },
   { path: '/products', component: ProductPage },
   { path: '/customers', component: CustomersPage },
+  { path: '/customers/:id', component: CustomersPage, props: true },
+  { path: '/customers/add', component: CustomersPage, props: true },
   { path: '/add-category', component: AddCategory },
+  { path: '/add-category/:id', component: AddCategory , props: true},
   { path: '/add-product', component: AddProduct },
+  { path: '/add-product/:id', component: AddProduct , props: true},
+  { path: '/add-product/:id/:pid', component: AddProduct , props: true},
+  { path: '/add-product/:id/add', component: AddProduct , props: true},
 ];
 
 const router = createRouter({

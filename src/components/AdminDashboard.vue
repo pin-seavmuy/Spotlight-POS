@@ -2,7 +2,7 @@
   <div>
     <header class="header">
       <div class="logo">
-        <router-link to="/">Spotlight</router-link>
+        <router-link to="/dashboard">Spotlight</router-link>
       </div>
       <div class="header-icons">
         <font-awesome-icon :icon="icons.bell" class="icon" />
@@ -15,7 +15,7 @@
     <div class="container">
       <div class="side-bar">
 
-        <router-link to="/" class="wrapper" active-class="active">
+        <router-link to="/dashboard" class="wrapper" active-class="active">
           <font-awesome-icon :icon="icons.thLarge" class="icons" />
           <p>Dashboard</p>
         </router-link>
@@ -57,14 +57,14 @@
                 <img src="../assets/img/products.png" />
                 <p>Total Product</p>
               </div>
-              <div class="qty">12000</div>
+              <div class="qty">{{ products.quantity }}</div>
             </div>
             <div class="box">
               <div class="wrapperBox">
                 <img src="../assets/img/list.png" />
                 <p>Categories</p>
               </div>
-              <div class="qty">43</div>
+              <div class="qty">{{ categories.quantity }}</div>
             </div>
             <div class="box">
               <div class="wrapperBox">
@@ -96,27 +96,53 @@
 <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { faBell, faShoppingBasket, faThLarge, faDatabase, faListAlt, faCreditCard, faBoxOpen, faUsers } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
   export default {
-  name: "AdminDashboard",
-  components: {
-      FontAwesomeIcon,
-  },
-  data() {
-      return {
-      icons: {
-          bell: faBell,
-          shoppingBasket: faShoppingBasket,
-          thLarge: faThLarge,
-          database: faDatabase,
-          category: faListAlt,
-          transaction: faCreditCard,
-          product: faBoxOpen,
-          users: faUsers,
-          // Add more icons as needed
+    name: "AdminDashboard",
+    components: {
+        FontAwesomeIcon,
+    },
+    data() {
+        return {
+          icons: {
+              bell: faBell,
+              shoppingBasket: faShoppingBasket,
+              thLarge: faThLarge,
+              database: faDatabase,
+              category: faListAlt,
+              transaction: faCreditCard,
+              product: faBoxOpen,
+              users: faUsers,
+              // Add more icons as needed
+          },
+          products: {},
+          categories: {}
+        };
+    },
+    methods: {
+      getProducts(){
+        axios.get('/products').then((res)=>{
+          this.products = res.data;
+          console.log(this.products);
+        }).catch((err)=>{
+          console.log(err);
+        });
       },
-      };
-  },
+      getCategories(){
+        axios.get('/categories').then((res)=>{
+          this.categories = res.data;
+          console.log(this.categories);
+        }).catch((err)=>{
+          console.log(err);
+        });
+      },
+    },
+    async mounted() {
+      this.getProducts();
+      this.getCategories();
+      
+    },
   };
 
 </script>

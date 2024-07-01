@@ -3,7 +3,7 @@
   <div>
     <header class="header">
       <div class="logo">
-        <router-link to="/">Spotlight</router-link>
+        <router-link to="/dashboard">Spotlight</router-link>
       </div>
       <div class="header-icons">
         <font-awesome-icon :icon="icons.bell" class="icon" />
@@ -16,7 +16,7 @@
     <div class="container">
       <div class="side-bar">
 
-        <router-link to="/" class="wrapper" active-class="active">
+        <router-link to="/dashboard" class="wrapper" active-class="active">
           <font-awesome-icon :icon="icons.thLarge" class="icons" />
           <p>Dashboard</p>
         </router-link>
@@ -72,19 +72,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(order, index) in orders" :key="order.id">
+            <tr v-for="(order, index) in orders.orders" :key="order.id">
               <td>{{ index + 1 }}</td>
-              <td>{{ order.customer }}</td>
-              <td>{{ order.productId }}</td>
-              <td>{{ order.product }}</td>
-              <td>{{ order.size }}</td>
-              <td>{{ order.color }}</td>
-              <td>{{ order.qty }}</td>
-              <td>{{ order.price }}</td>
+              <td>{{ order.user.first_name + " " + order.user.last_name }}</td>
+              <td>{{ order.pinfo.product_id }}</td>
+              <td>{{ order.product.name }}</td>
+              <td>{{ order.pinfo.size }}</td>
+              <td>{{ order.pinfo.color }}</td>
+              <td>{{ order.pinfo.quantity }}</td>
+              <td>{{ '$' + order.product.price }}</td>
               <td>
-                <select v-model="order.status">
-                  <option value="Pending">Pending</option>
-                  <option value="Shipped">Shipped</option>
+                <select v-model="order.status"  @change="updateStatus(order.id)">
+                  <option value="0">Pending</option>
+                  <option value="1">Shipped</option>
                 </select>
               </td>
             </tr>
@@ -101,6 +101,7 @@
 <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { faBell, faShoppingBasket, faThLarge, faDatabase, faListAlt, faCreditCard, faBoxOpen, faUsers, faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
   export default {
     name: "OrdersPage",
     components: {
@@ -119,13 +120,33 @@
           users: faUsers,
           search: faSearch,
         },
-        orders: [
-          { id: 1, customer: 'John Doe', productId: 'C0001', product: 'Cigarella Skill Shirt', size: 'M', color: 'Black', qty: 2, price: '$50.00', status: 'Pending' },
-          { id: 2, customer: 'Jane Smith', productId: 'C0002', product: 'Wool Tweed A-Line', size: 'M', color: 'N/A', qty: 1, price: '$15.00', status: 'Pending' },
-          { id: 3, customer: 'Michael Brown', productId: 'C0003', product: 'Cheyenne Floral Dress', size: 'M', color: 'N/A', qty: 1, price: '$35.00', status: 'Shipped' },
-          
-        ],
+        // orders: [
+        //   { id: 1, customer: 'John Doe', productId: 'C0001', product: 'Cigarella Skill Shirt', size: 'M', color: 'Black', qty: 2, price: '$50.00', status: 'Pending' },
+        //   { id: 2, customer: 'Jane Smith', productId: 'C0002', product: 'Wool Tweed A-Line', size: 'M', color: 'N/A', qty: 1, price: '$15.00', status: 'Pending' },
+        //   { id: 3, customer: 'Michael Brown', productId: 'C0003', product: 'Cheyenne Floral Dress', size: 'M', color: 'N/A', qty: 1, price: '$35.00', status: 'Shipped' },
+        // ],
+        orders: {},
       };
+    },
+    methods: {
+      getOrder(){
+        axios.get('/orders').then((res)=>{
+          this.orders = res.data;
+          console.log(this.orders);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
+      updateStatus($orderId){
+        axios.get('/order/' + $orderId).then((res)=>{
+          console.log(res.data);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
+    },
+    mounted() {
+      this.getOrder();
     },
   };
 </script>

@@ -2,7 +2,7 @@
   <div>
     <header class="header">
       <div class="logo">
-        <router-link to="/">Spotlight</router-link>
+        <router-link to="/dashboard">Spotlight</router-link>
       </div>
       <div class="header-icons">
         <font-awesome-icon :icon="icons.bell" class="icon" />
@@ -14,7 +14,7 @@
     </header>
     <div class="container">
       <div class="side-bar">
-        <router-link to="/" class="wrapper" active-class="active">
+        <router-link to="/dashboard" class="wrapper" active-class="active">
           <font-awesome-icon :icon="icons.thLarge" class="icons" />
           <p>Dashboard</p>
         </router-link>
@@ -46,18 +46,52 @@
       </div>
 
       <div class="dashboard">
-        <form>
+        <form v-if="id==null" @submit.prevent="createCategory(name)">
           <div class="formBox">
             <h2>Create Category</h2>
             <font-awesome-icon :icon="icons.edit" class="icons" />
           </div>
+          <br>
+          <div v-if="status" class="messageContainer">
+            <div v-if="messageStatus == 'true'" style="background-color: green; color: white; font-weight: bold;" class="messageBox">{{ message }}</div>
+            <div v-else style="background-color: red;color: white; font-weight: bold;" class="messageBox">{{ message }}</div>
+          </div>
           <br/><br/>
           <div class="formBox">
             <label>Category</label>
-            <input type="text" placeholder="Category">
+            <input v-model="name" type="text" placeholder="Category">
           </div>
           <br/>
-          <input class="submit" type="submit" value="Create Category">
+          <div class="buttonSubmit">
+            <router-link to="/category">
+              <button class="submit" type="submit" value="Create Category">Cancel</button>
+            </router-link>
+            <input class="submit" type="submit" value="Create Category">
+          </div>
+        </form>
+
+        <form v-else @submit.prevent="updateCategory(name)">
+          <div class="formBox">
+            <h2>Update Category</h2>
+            <font-awesome-icon :icon="icons.edit" class="icons" />
+          </div>
+          <br>
+          <div v-if="status" class="messageContainer">
+            <div v-if="messageStatus == 'true'" style="background-color: green; color: white; font-weight: bold;" class="messageBox">{{ message }}</div>
+            <div v-else style="background-color: red;color: white; font-weight: bold;" class="messageBox">{{ message }}</div>
+          </div>
+          <br/><br/>
+          <div class="formBox">
+            <label>Category</label>
+            <input v-model="name" type="text" placeholder="Category">
+          </div>
+          <br/>
+          <div class="buttonSubmit">
+            <router-link to="/category">
+              <button class="submit" type="submit" value="Create Category">Cancel</button>
+            </router-link>
+            <input class="submit" type="submit" value="Create Category">
+          </div>
         </form>
       </div>
     </div>
@@ -67,12 +101,16 @@
 <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { faBell, faShoppingBasket, faThLarge, faDatabase, faListAlt, faCreditCard, faBoxOpen, faUsers, faSearch, faEdit } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
   export default {
     name: "AddCategory",
     components: {
       FontAwesomeIcon,
     },
+    props:[
+      'id'
+    ],
     data() {
       return {
         icons: {
@@ -87,7 +125,54 @@
           search: faSearch,
           edit: faEdit,
         },
+        category: {},
+        name: "",
+        message: "",
+        status: false,
+        messageStatus: false,
       };
+    },
+    methods: {
+      createCategory(name){
+        axios.post('/category',{
+          'name': name
+        }).then((res)=>{
+          console.log(res);
+          this.message = res.data.message;
+          this.messageStatus = res.data.status;
+          this.status = true;
+
+          setTimeout(() => {
+            this.status = false;
+          }, 2000);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
+      updateCategory(name){
+        axios.post('/category/' + this.id,{
+            'name': name
+          }
+        ).then((res)=>{
+          console.log(res);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
+      getCategory(){
+        if(this.id!=null){
+          axios.get('/category/id/'+this.id).then((res)=>{
+            console.log(res.data);
+            this.name = res.data.category.name;
+          }).catch((err)=>{
+            console.log(err);
+          })
+        }
+      }
+    },
+    mounted() {
+      this.getCategory();
+      console.log(this.id);
     },
   };
 </script>
@@ -101,8 +186,6 @@
     background-color: #97b0937f;
     padding: 10px 20px;
     border-radius: 10px;
-    
-
   }
   .formBox {
     display: flex;
@@ -111,6 +194,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 50px;
+  }
+  .dashboard{
+    position: relative;
   }
   input {
     width: 100%;
@@ -122,6 +208,33 @@
     height: 40px;
     background-color: #97b0937f;
     border: 1px solid gray;
-    margin: 10px 0 0 200px;
+    /* margin: 10px 0 0 200px; */
   }
+  .messageBox {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all;
+    font-size: 14px;
+    width: fit-content;
+    position: absolute;
+    left: 27.5%;
+    top: -10px;
+  }
+  .messageContainer{
+    position: relative;
+
+  }
+  .fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+.buttonSubmit{
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+}
 </style>

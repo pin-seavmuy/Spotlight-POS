@@ -2,7 +2,7 @@
   <div>
     <header class="header">
       <div class="logo">
-        <router-link to="/">Spotlight</router-link>
+        <router-link to="/dashboard">Spotlight</router-link>
       </div>
       <div class="header-icons">
         <font-awesome-icon :icon="icons.bell" class="icon" />
@@ -15,7 +15,7 @@
     <div class="container">
       <div class="side-bar">
 
-        <router-link to="/" class="wrapper" active-class="active">
+        <router-link to="/dashboard" class="wrapper" active-class="active">
           <font-awesome-icon :icon="icons.thLarge" class="icons" />
           <p>Dashboard</p>
         </router-link>
@@ -54,32 +54,39 @@
             <input type="text" placeholder="search ...">
           </div>
         </div>
-        <div class="table">
+        <div class="table" v-if="orders.status == 'true'">
           <table>
             <thead>
               <tr>
                 <th>No</th>
                 <th>Customer</th>
                 <th>Product</th>
+                <th>Size</th>
+                <th>Color</th>
                 <th>Total</th>
                 <th>Order Date</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(order, index) in orders" :key="order.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ order.customer }}</td>
-                <td>{{ order.product }}</td>
-                <td>{{ order.total }}</td>
-                <td>{{ order.orderDate }}</td>
-                <td class="action">
-                  <font-awesome-icon :icon="icons.edit" class="icon action-icon" @click="editOrder(order.id)" />
-                  <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteOrder(order.id)" />
-                </td>
+            <tbody >
+              <tr  v-for="(order, index) in orders.orders" :key="order.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ order.user.first_name + " " + order.user.last_name }}</td>
+                    <td>{{ order.product.name }}</td>
+                    <td>{{ order.pinfo.size }}</td>
+                    <td>{{ order.pinfo.color }}</td>
+                    <td>{{ '$' + order.total }}</td>
+                    <td>{{ order.created_at.split('T')[0] + ' '  + order.created_at.split('T')[1].split(':')[0] + ':' + order.created_at.split('T')[1].split(':')[1] }}</td>
+                    <td class="action">
+                      <font-awesome-icon :icon="icons.edit" class="icon action-icon" @click="editOrder(order.id)" />
+                      <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteOrder(order.id)" />
+                    </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div v-else>
+          <h1 style="display: flex; justify-content: center">{{ orders.message }}</h1>
         </div>
       </div>
     </div>
@@ -89,6 +96,7 @@
 <script>
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import { faBell, faShoppingBasket, faThLarge, faDatabase, faListAlt, faCreditCard, faBoxOpen, faUsers, faSearch, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
   export default {
     name: "OrdersPage",
@@ -123,9 +131,25 @@
         console.log('Edit order', id);
       },
       deleteOrder(id) {
-        // Implement delete order functionality
-        console.log('Delete order', id);
+        axios.get('/order/delete/' + id).then((res)=>{
+          console.log(res);
+          this.getOrder();
+        }).catch((err)=>{
+          console.log(err);
+        })
       },
+      getOrder(){
+        axios.get('/orders/sold').then((res)=>{
+          this.orders = res.data;
+          console.log(this.orders);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
+      
+    },
+    mounted() {
+      this.getOrder();
     },
   };
 </script>
