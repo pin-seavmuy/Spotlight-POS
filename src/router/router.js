@@ -9,7 +9,8 @@ import CustomersPage from '../components/Customers.vue';
 import AddCategory from '../components/AddCategory.vue'; 
 import AddProduct from '../components/AddProduct.vue'; 
 import POS from '@/components/POS.vue';
-
+import Employee from '@/components/Employee.vue';
+import AddEmployee from '@/components/AddEmployee.vue';
 
 const routes = [
   { path: '/dashboard', component: AdminDashboard },
@@ -27,6 +28,10 @@ const routes = [
   { path: '/add-product/:id/:pid', component: AddProduct , props: true},
   { path: '/add-product/:id/add', component: AddProduct , props: true},
   { path: '/POS', component: POS },
+  { path: '/employee', component:  Employee},
+  { path: '/employee/:id', component:  Employee, props: true},
+  { path: '/add-employee', component: AddEmployee },
+  { path: '/add-employee/:id', component: AddEmployee, props: true },
 ];
 
 const router = createRouter({

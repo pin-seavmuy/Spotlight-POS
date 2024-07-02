@@ -50,7 +50,10 @@
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>POS</p>
           </router-link>
-
+          <router-link to="/employee" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>Employee</p>
+          </router-link>
       </div>
       
       <div class="dashboard">

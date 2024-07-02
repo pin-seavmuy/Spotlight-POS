@@ -49,7 +49,6 @@
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>POS</p>
           </router-link>
-
           <router-link to="/employee" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>Employee</p>
@@ -57,12 +56,12 @@
         </div>
         <div class="dashboard">
         <div class="wrapper1">
-          <h2>Categories</h2>
+          <h2>Employee</h2>
           <div class="searchBox">
             <font-awesome-icon :icon="icons.search" class="icons" />
             <input type="text" placeholder="search clothes, orders, and more....">
           </div>
-          <router-link to="/add-category" >
+          <router-link to="/add-employee" >
             <div class="add">
               <font-awesome-icon :icon="icons.plus" class="icons" />
               <p>ADD</p>
@@ -74,21 +73,21 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Category</th>
-                <th>P_ID</th>
+                <th>Name</th>
+                <th>Email</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(category, index) in categories" :key="category.id">
+              <tr v-for="(employee, index) in filterEmployees" :key="employee.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ category.name }}</td>
-                <td class="ellipsis" style="max-width: 100px;" >{{ productID[index] }}</td>
+                <td>{{ employee.first_name + ' ' + employee.last_name}}</td>
+                <td class="ellipsis" style="max-width: 100px;" >{{ employee.email }}</td>
                 <td class="action">
-                  <router-link style="text-decoration: none; color: black" :to="'/add-category/' + category.id">
+                  <router-link style="text-decoration: none; color: black" :to="'/add-employee/' + employee.id">
                     <font-awesome-icon :icon="icons.edit" class="icon action-icon"/>
                   </router-link>
-                  <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteCategory(category.id)" />
+                  <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteEmployee(employee.id)" />
                 </td>
               </tr>
             </tbody>
@@ -102,6 +101,7 @@
   
   <script>
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import { reactive } from 'vue';
     import { faBell, faShoppingBasket, faThLarge, faDatabase, faListAlt, faCreditCard, faBoxOpen, faUsers,faSearch, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
@@ -132,33 +132,47 @@ import axios from 'axios';
             { id: 2,  productID: 'C0002', category: "Hoodie" },
             { id: 3, productID: 'C0003', category: "T-shirt"  },
           ],
-          categories: {},
+          employees: {},
+          filterEmployees: [],
           productID: {},
         };
       },
       methods: {
-        getCategories(){
-          axios.get('/categories/product').then((res)=>{
-            this.categories = res.data.products;
-            this.productID = res.data.productId;
-            console.log(this.categories);
-            console.log(this.productID);
+        getEmployee(){
+          axios.get('/employees').then((res)=>{
+            this.employees = res.data.users;
+            this.filteredUsers(this.employees);
+            console.log(this.employees);
           }).catch((err)=>{
             console.log(err);
           })
         },
-        deleteCategory(id){
-          axios.delete('/category/'+id).then((res)=>{
+        deleteEmployee(id){
+          axios.delete('/employee/'+id).then((res)=>{
             console.log(res.data);
-            this.getCategories();
+            this.getEmployee();
+            this.filterEmployees = [];
           }).catch((err)=>{
             console.log(err);
           })
+        },
+        filteredUsers(employees){
+          employees.forEach(user => {
+            if(user.first_name != 'admin'){
+              this.filterEmployees.push(user);
+            }
+          });
         }
       },
       mounted() {
-        this.getCategories();
+        this.getEmployee();
       },
+
+      // computed:{
+      //   filteredUsers() {
+      //     return this.employees.filter(user => user.first_name != 'admin');
+      //   }
+      // }
     };
 
   </script>

@@ -49,7 +49,10 @@
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>POS</p>
           </router-link>
-
+          <router-link to="/employee" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>Employee</p>
+          </router-link>
         </div>
         <div class="dashboard" v-if="url != 'add' && id==null">
           <div class="wrapper1">
@@ -88,8 +91,8 @@
                   <!-- <td>{{ product.id }}</td> -->
                   <td>{{ customer.first_name + ' ' + customer.last_name }}</td>
                   <td>{{ customer.email }}</td>
-                  <td class="ellipsis" style="max-width: 200px;">{{ customer.phone ? customer.phone : 'N/A' }}</td>
-                  <td class="ellipsis" style="max-width: 100px;"> {{ customer.address ? customer.address : 'N/A' }}</td>
+                  <td class="ellipsis" style="min-width: 300px;">{{ customer.phone ? customer.phone : 'N/A' }}</td>
+                  <td class="ellipsis" style="min-width: 100px;"> {{ customer.address ? customer.address : 'N/A' }}</td>
                   <td class="action">
                     <router-link :to="'/customers/' + customer.id">
                       <font-awesome-icon :icon="icons.edit" class="icon action-icon"/>
@@ -425,6 +428,12 @@
     display: flex;
     justify-content: center;
     gap: 50px;
+  }
+
+  .ellipsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-clamp: 1;
   }
   
   .submit,
