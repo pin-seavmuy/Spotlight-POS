@@ -45,6 +45,11 @@
           <p>Customers</p>
         </router-link>
 
+        <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
+          </router-link>
+
       </div>
 
       <div class="dashboard">
@@ -71,7 +76,7 @@
                 <img src="../assets/img/mobile-banking.png" />
                 <p>Transactions</p>
               </div>
-              <div class="qty">669</div>
+              <div class="qty">{{ orders.quantity }}</div>
             </div>
           </div>
           <div class="wrapper1">
@@ -80,7 +85,7 @@
                 <img src="../assets/img/shopping-cart.png" />
                 <p>Order Today</p>
               </div>
-              <div class="qty">15</div>
+              <div class="qty">{{ orders.todayItem }}</div>
             </div>
           </div>
         </div>
@@ -117,7 +122,8 @@ import axios from 'axios';
               // Add more icons as needed
           },
           products: {},
-          categories: {}
+          categories: {},
+          orders: {},
         };
     },
     methods: {
@@ -137,11 +143,19 @@ import axios from 'axios';
           console.log(err);
         });
       },
+      getOrder(){
+        axios.get('/orders').then((res)=>{
+          this.orders = res.data;
+          console.log(this.orders);
+        }).catch((err)=>{
+          console.log(err);
+        })
+      },
     },
     async mounted() {
       this.getProducts();
       this.getCategories();
-      
+      this.getOrder();
     },
   };
 

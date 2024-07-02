@@ -46,6 +46,11 @@
           <p>Customers</p>
         </router-link>
 
+        <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
+          </router-link>
+
       </div>
       
       <div class="dashboard">
@@ -79,7 +84,7 @@
               <td>{{ order.product.name }}</td>
               <td>{{ order.pinfo.size }}</td>
               <td>{{ order.pinfo.color }}</td>
-              <td>{{ order.pinfo.quantity }}</td>
+              <td>{{ order.quantity }}</td>
               <td>{{ '$' + order.product.price }}</td>
               <td>
                 <select v-model="order.status"  @change="updateStatus(order.id)">

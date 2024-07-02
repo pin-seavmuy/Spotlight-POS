@@ -43,6 +43,11 @@
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>Customers</p>
           </router-link>
+
+          <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
+          </router-link>
         </div>
   
         <div class="dashboard  dashboardb">

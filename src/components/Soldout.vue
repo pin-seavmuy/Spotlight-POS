@@ -45,6 +45,11 @@
           <p>Customers</p>
         </router-link>
 
+        <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
+          </router-link>
+
       </div>
       <div class="dashboard">
         <div class="wrapper1">
@@ -139,7 +144,7 @@ import axios from 'axios';
         })
       },
       getOrder(){
-        axios.get('/orders/sold').then((res)=>{
+        axios.get('/order/sold').then((res)=>{
           this.orders = res.data;
           console.log(this.orders);
         }).catch((err)=>{

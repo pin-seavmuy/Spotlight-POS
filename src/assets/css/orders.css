@@ -36,7 +36,10 @@ input {
     text-align: left;
     white-space: nowrap; /* Ensures the text does not wrap */
   }
-  
+  td{
+    max-height: 10px;
+  }
+
   th {
     background-color: #97b093;
   }

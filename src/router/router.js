@@ -8,6 +8,7 @@ import ProductPage from '../components/Products.vue';
 import CustomersPage from '../components/Customers.vue'; 
 import AddCategory from '../components/AddCategory.vue'; 
 import AddProduct from '../components/AddProduct.vue'; 
+import POS from '@/components/POS.vue';
 
 
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
   { path: '/add-product/:id', component: AddProduct , props: true},
   { path: '/add-product/:id/:pid', component: AddProduct , props: true},
   { path: '/add-product/:id/add', component: AddProduct , props: true},
+  { path: '/POS', component: POS },
 ];
 
 const router = createRouter({

@@ -45,6 +45,11 @@
             <p>Customers</p>
           </router-link>
 
+          <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
+          </router-link>
+
         </div>
         <div class="dashboard" v-if="url != 'add' && id==null">
           <div class="wrapper1">
