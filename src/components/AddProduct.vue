@@ -8,50 +8,58 @@
           <font-awesome-icon :icon="icons.bell" class="icon" />
           <div class="account">
             <img src="../assets/img/people.png" alt="" />
-            <p>ASUS</p>
+            <div class="user-dropdown" v-if="user!=null">
+              <button @click="toggleDropdown" class="username">{{ user.first_name }}</button>
+              <div v-if="showDropdown" class="dropdown-menu">
+                <button @click="logout">Log Out</button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
       <div class="container">
         <div class="side-bar">
-          <router-link to="/dashboard" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.thLarge" class="icons" />
-            <p>Dashboard</p>
-          </router-link>
-  
-          <router-link to="/orders" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.shoppingBasket" class="icons" />
-            <p>Orders</p>
-          </router-link>
-  
-          <router-link to="/sold" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.database" class="icons" />
-            <p>Sold out</p>
-          </router-link>
-  
-          <router-link to="/category" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.category" class="icons" />
-            <p>Category</p>
-          </router-link>
-  
-          <router-link to="/products" class="wrapper">
-            <font-awesome-icon :icon="icons.product" class="icons" />
-            <p>Products</p>
-          </router-link>
+          <div v-if="user.first_name == 'admin'">
+
+            <router-link to="/dashboard" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.thLarge" class="icons" />
+              <p>Dashboard</p>
+            </router-link>
+    
+            <router-link to="/orders" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.shoppingBasket" class="icons" />
+              <p>Orders</p>
+            </router-link>
+    
+            <router-link to="/sold" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.database" class="icons" />
+              <p>Sold out</p>
+            </router-link>
+    
+            <router-link to="/category" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.category" class="icons" />
+              <p>Category</p>
+            </router-link>
+    
+            <router-link to="/products" class="wrapper">
+              <font-awesome-icon :icon="icons.product" class="icons" />
+              <p>Products</p>
+            </router-link>
+            <router-link to="/POS" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.users" class="icons" />
+              <p>POS</p>
+            </router-link>
+            <router-link to="/employee" class="wrapper" active-class="active">
+              <font-awesome-icon :icon="icons.users" class="icons" />
+              <p>Employee</p>
+            </router-link>
+          </div>
   
           <router-link to="/customers" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>Customers</p>
           </router-link>
 
-          <router-link to="/POS" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.users" class="icons" />
-            <p>POS</p>
-          </router-link>
-          <router-link to="/employee" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.users" class="icons" />
-            <p>Employee</p>
-          </router-link>
         </div>
   
         <div class="dashboard  dashboardb">
@@ -442,6 +450,7 @@
           upload: faUpload,
         },
         categories: {},
+        user: {},
         productName: '',
         category: '',
         color: '',
@@ -455,10 +464,19 @@
         productInfo: {},
         url: "",
         qyt: 0,
+        showDropdown: false,
       };
     },
     
     methods: {
+      toggleDropdown() {
+          this.showDropdown = !this.showDropdown;
+        },
+        logout() {
+          localStorage.removeItem('token');
+         
+          this.$router.push('/login');
+        },
       handleFileUpload(event) {
         this.imageFile = event.target.files[0];
       },
@@ -628,12 +646,21 @@
         }).catch((err)=>{
           console.log(err);
         })
+      },
+      getUser(){
+        axios.get('/user').then((res)=>{
+          console.log(res);
+          this.user = res.data;
+        }).catch((err)=>{
+          console.log(err);
+        })
       }
     },
     mounted() {
       this.getCategory();
       this.getProduct();
       this.getProductInfo();
+      this.getUser();
     },
     watch:{
       '$route.path'(path){
@@ -645,6 +672,42 @@
   
   <style scoped>
   @import '../assets/css/category.css';
+  
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .username {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    width: 75px;
+    top: 100%;
+    left: -18px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+
+  .dropdown-menu button:hover {
+    background-color: #f1f1f1;
+  }
   .messageContainer{
     position: absolute;
     /* background-color: black; */

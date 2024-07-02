@@ -8,13 +8,14 @@
           <font-awesome-icon :icon="icons.bell" class="icon" />
           <div class="account">
             <img src="../assets/img/people.png" alt="" />
-            <p>ASUS</p>
+            <p v-if="user!=null" style="margin-left: 10px; display: flex;">{{ user.first_name}}</p>
           </div>
         </div>
       </header>
       <div class="container">
         <div class="side-bar">
 
+          <div v-if="user.first_name == 'admin'">
             <router-link to="/dashboard" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.thLarge" class="icons" />
             <p>Dashboard</p>
@@ -39,6 +40,11 @@
             <font-awesome-icon :icon="icons.product" class="icons" />
             <p>Products</p>
           </router-link>
+          <router-link to="/employee" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>Employee</p>
+          </router-link>
+          </div>
 
           <router-link to="/customers" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
@@ -48,10 +54,6 @@
           <router-link to="/POS" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>POS</p>
-          </router-link>
-          <router-link to="/employee" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.users" class="icons" />
-            <p>Employee</p>
           </router-link>
         </div>
         <div class="dashboard">
@@ -79,7 +81,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(employee, index) in filterEmployees" :key="employee.id">
+              <tr v-for="(employee, index) in employees" :key="employee.id">
                 <td>{{ index + 1 }}</td>
                 <td>{{ employee.first_name + ' ' + employee.last_name}}</td>
                 <td class="ellipsis" style="max-width: 100px;" >{{ employee.email }}</td>
@@ -132,16 +134,26 @@ import axios from 'axios';
             { id: 2,  productID: 'C0002', category: "Hoodie" },
             { id: 3, productID: 'C0003', category: "T-shirt"  },
           ],
+          showDropdown: false,
           employees: {},
           filterEmployees: [],
           productID: {},
+          user:{},
         };
       },
       methods: {
+        toggleDropdown() {
+          this.showDropdown = !this.showDropdown;
+        },
+        logout() {
+          localStorage.removeItem('token');
+         
+          this.$router.push('/login');
+        },
         getEmployee(){
           axios.get('/employees').then((res)=>{
             this.employees = res.data.users;
-            this.filteredUsers(this.employees);
+            // this.filteredUsers(this.employees);
             console.log(this.employees);
           }).catch((err)=>{
             console.log(err);
@@ -151,7 +163,6 @@ import axios from 'axios';
           axios.delete('/employee/'+id).then((res)=>{
             console.log(res.data);
             this.getEmployee();
-            this.filterEmployees = [];
           }).catch((err)=>{
             console.log(err);
           })
@@ -162,10 +173,19 @@ import axios from 'axios';
               this.filterEmployees.push(user);
             }
           });
-        }
+        },
+        getUser(){
+        axios.get('/user').then((res)=>{
+          console.log(res);
+          this.user = res.data;
+        }).catch((err)=>{
+          console.log(err);
+        })
+      }
       },
       mounted() {
         this.getEmployee();
+        this.getUser();
       },
 
       // computed:{
@@ -188,7 +208,7 @@ import axios from 'axios';
     display: flex;
     justify-content: center;
     gap: 50px;
-    padding: 15px ; 
+    padding: 15px; 
     border-width: 0.1;
   }
   .ellipsis {

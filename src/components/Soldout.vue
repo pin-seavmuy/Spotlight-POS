@@ -8,50 +8,52 @@
         <font-awesome-icon :icon="icons.bell" class="icon" />
         <div class="account">
           <img src="../assets/img/people.png" alt="" />
-          <p>ASUS</p>
+          <p v-if="user!=null" style="margin-left: 10px; display: flex;">{{ user.first_name}}</p>
         </div>
       </div>
     </header>
     <div class="container">
       <div class="side-bar">
 
-        <router-link to="/dashboard" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.thLarge" class="icons" />
-          <p>Dashboard</p>
-        </router-link>
+        <div v-if="user.first_name == 'admin'">
+            <router-link to="/dashboard" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.thLarge" class="icons" />
+            <p>Dashboard</p>
+          </router-link>
 
-        <router-link to="/orders" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.shoppingBasket" class="icons" />
-          <p>Orders</p>
-        </router-link>
+          <router-link to="/orders" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.shoppingBasket" class="icons" />
+            <p>Orders</p>
+          </router-link>
 
-        <router-link to="/sold" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.database" class="icons" />
-          <p>Sold out</p>
-        </router-link>
+          <router-link to="/sold" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.database" class="icons" />
+            <p>Sold out</p>
+          </router-link>
 
-        <router-link to="/category" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.category" class="icons" />
-          <p>Category</p>
-        </router-link>
+          <router-link to="/category" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.category" class="icons" />
+            <p>Category</p>
+          </router-link>
 
-        <router-link to="/products" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.product" class="icons" />
-          <p>Products</p>
-        </router-link>
-
-        <router-link to="/customers" class="wrapper" active-class="active">
-          <font-awesome-icon :icon="icons.users" class="icons" />
-          <p>Customers</p>
-        </router-link>
-
-        <router-link to="/POS" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.users" class="icons" />
-            <p>POS</p>
+          <router-link to="/products" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.product" class="icons" />
+            <p>Products</p>
           </router-link>
           <router-link to="/employee" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>Employee</p>
+          </router-link>
+          </div>
+
+          <router-link to="/customers" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>Customers</p>
+          </router-link>
+
+          <router-link to="/POS" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>POS</p>
           </router-link>
       </div>
       <div class="dashboard">
@@ -131,6 +133,8 @@ import axios from 'axios';
           { id: 2, customer: 'Jane Smith', product: 'Wool Tweed A-Line', total: '$15.00', orderDate: '26/06/24' },
           { id: 3, customer: 'Michael Brown', product: 'Cheyenne Floral Dress', total: '$35.00', orderDate: '26/06/24'},
         ],
+        user: {},
+        showDropdown: false,
       };
     },
     methods: {
@@ -138,6 +142,14 @@ import axios from 'axios';
         // Implement edit order functionality
         console.log('Edit order', id);
       },
+      toggleDropdown() {
+          this.showDropdown = !this.showDropdown;
+        },
+        logout() {
+          localStorage.removeItem('token');
+          
+          this.$router.push('/login');
+        },
       deleteOrder(id) {
         axios.get('/order/delete/' + id).then((res)=>{
           console.log(res);
@@ -154,10 +166,18 @@ import axios from 'axios';
           console.log(err);
         })
       },
-      
+      getUser(){
+        axios.get('/user').then((res)=>{
+          console.log(res);
+          this.user = res.data;
+        }).catch((err)=>{
+          console.log(err);
+        })
+      }
     },
     mounted() {
       this.getOrder();
+      this.getUser();
     },
   };
 </script>

@@ -11,8 +11,11 @@ import AddProduct from '../components/AddProduct.vue';
 import POS from '@/components/POS.vue';
 import Employee from '@/components/Employee.vue';
 import AddEmployee from '@/components/AddEmployee.vue';
+import Login from '@/components/Login.vue';
 
 const routes = [
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: Login },
   { path: '/dashboard', component: AdminDashboard },
   { path: '/orders', component: OrdersPage },
   { path: '/sold', component: SoldOut },
@@ -37,6 +40,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const token = localStorage.getItem('token');
+
+  if (authRequired && !token) {
+    return next('/login');
+  }
+
+  next();
 });
 
 export default router;

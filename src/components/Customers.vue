@@ -8,13 +8,18 @@
           <font-awesome-icon :icon="icons.bell" class="icon" />
           <div class="account">
             <img src="../assets/img/people.png" alt="" />
-            <p>ASUS</p>
+            <div class="user-dropdown" v-if="user!=null">
+              <button @click="toggleDropdown" class="username">{{ user.first_name }}</button>
+              <div v-if="showDropdown" class="dropdown-menu">
+                <button @click="logout">Log Out</button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
       <div class="container">
         <div class="side-bar">
-
+          <div v-if="user.first_name == 'admin'">
             <router-link to="/dashboard" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.thLarge" class="icons" />
             <p>Dashboard</p>
@@ -39,6 +44,11 @@
             <font-awesome-icon :icon="icons.product" class="icons" />
             <p>Products</p>
           </router-link>
+          <router-link to="/employee" class="wrapper" active-class="active">
+            <font-awesome-icon :icon="icons.users" class="icons" />
+            <p>Employee</p>
+          </router-link>
+          </div>
 
           <router-link to="/customers" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
@@ -48,10 +58,6 @@
           <router-link to="/POS" class="wrapper" active-class="active">
             <font-awesome-icon :icon="icons.users" class="icons" />
             <p>POS</p>
-          </router-link>
-          <router-link to="/employee" class="wrapper" active-class="active">
-            <font-awesome-icon :icon="icons.users" class="icons" />
-            <p>Employee</p>
           </router-link>
         </div>
         <div class="dashboard" v-if="url != 'add' && id==null">
@@ -239,6 +245,7 @@
             trash: faTrash,
             plus: faPlus,
           },
+          showDropdown: false,
           message: "",
           status: false,
           messageStatus: false,
@@ -250,12 +257,21 @@
           email: "",
           address: "",
           phone: "",
+          user:{},
         };
       },
       props:[
         'id',
       ],
       methods: {
+        toggleDropdown() {
+          this.showDropdown = !this.showDropdown;
+        },
+        logout() {
+          localStorage.removeItem('token');
+         
+          this.$router.push('/login');
+        },
         getCustomer(){
           axios.get('/customers').then((res)=>{
             console.log(res);
@@ -333,11 +349,20 @@
           }).catch((err)=>{
             console.log(err);
           })
-        }
+        },
+        getUser(){
+        axios.get('/user').then((res)=>{
+          console.log(res);
+          this.user = res.data;
+        }).catch((err)=>{
+          console.log(err);
+        })
+      }
       },
       mounted() {
         this.getCustomer();
         this.getCustomerById();
+        this.getUser();
         this.url = this.$route.path.split('/').pop();
       },
       watch:{
@@ -352,6 +377,42 @@
   
   <style scoped>
   /* @import '../assets/css/style.css'; */
+  
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .username {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    width: 75px;
+    top: 100%;
+    left: -18px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+
+  .dropdown-menu button:hover {
+    background-color: #f1f1f1;
+  }
   .messageContainer{
     position: absolute;
     /* background-color: black; */
