@@ -138,10 +138,10 @@
               <!-- </div> -->
             </div>
             <div class="formButtons">
-              <input class="submit" type="submit" value="Update">
               <router-link :to="'/customers'">
                 <button class="cancel" @click="cancelForm">Cancel</button>
               </router-link>
+              <input class="submit" type="submit" value="Update">
             </div>
           </form>
       </div>

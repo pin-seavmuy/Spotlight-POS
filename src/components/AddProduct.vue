@@ -138,10 +138,10 @@
             </div>
             <br />
             <div class="formButtons">
-              <input class="submit" type="submit" value="Create Product">
               <router-link to="/products">
                 <button class="cancel" @click="cancelForm">Cancel</button>
               </router-link>
+              <input class="submit" type="submit" value="Create Product">
             </div>
           </form>
           <form v-if="(id!=null && pid==null) && url!='add'" enctype="multipart/form-data" @submit.prevent="updateProduct(this.id)">
@@ -218,10 +218,10 @@
             </div>
             <br />
             <div class="formButtons">
-              <input class="submit" type="submit" value="Create Product">
               <router-link to="/products">
                 <button class="cancel" @click="cancelForm">Cancel</button>
               </router-link>
+              <input class="submit" type="submit" value="Update Product">
             </div>
           </form>
           <div v-if="(id!=null && pid==null) && url!='add'" class="dashboard">

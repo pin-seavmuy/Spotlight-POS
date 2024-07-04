@@ -108,7 +108,7 @@
             <router-link to="/category">
               <button class="submit" type="submit" value="Create Category">Cancel</button>
             </router-link>
-            <input class="submit" type="submit" value="Create Category">
+            <input class="submit" type="submit" value="Update Category">
           </div>
         </form>
       </div>
@@ -183,6 +183,14 @@ import axios from 'axios';
           }
         ).then((res)=>{
           console.log(res);
+          console.log(res);
+          this.message = res.data.message;
+          this.messageStatus = res.data.status;
+          this.status = true;
+
+          setTimeout(() => {
+            this.status = false;
+          }, 2000);
         }).catch((err)=>{
           console.log(err);
         })
