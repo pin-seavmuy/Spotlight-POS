@@ -80,7 +80,7 @@
                     <tr v-if="orders" v-for="order in orders">
                       <td>{{ order.product.name }}</td>
                       <td>
-                        <input class="inputNumber" type="number" :value="order.quantity" @change="addToCart(customer_id, order.product_id,order.pinfo_id,order.quantity)">
+                        <input class="inputNumber" type="number" :value="order.quantity" @change="(event) => updateUserQuantity(customer_id, order.product_id, order.pinfo_id, event.target.value)">
                         <font-awesome-icon :icon="icons.trash" class="icon action-icon" @click="deleteCart(order.id)" />
                       </td>
                       <td>${{ order.total }}</td>
@@ -95,12 +95,12 @@
               <div class="buttonContainer" v-if="customer_id">
                 <!-- <button class="button1">Cancel</button> -->
                  <div></div>
-                <button class="button2">Add To Cart</button>
+                <button class="button2" v-if="customer_id" @click="checkOutCustomer(customer_id)">Add To Cart</button>
               </div>
           </div>
           <div class="dashright">
             <div @click="addToCart(customer_id,product.product_id,product.id,1)"v-for="product in products" class="productCon">
-              <img src="../assets/img/1.webp" alt="">
+              <img :src="`http://localhost:9000/image/`+ product.product.image" alt="">
               <p>{{product.product.name}}({{ product.color }}/{{ product.size }})</p>
             </div>
             
@@ -190,11 +190,34 @@
         },
         getOrder(id){
           axios.get('/orders/' + id).then((res)=>{
+            this.total = 0;
+            console.log(res.data);
             this.orders = res.data.order;
             this.orders.forEach((order)=>{
             this.total += order.total;
             });
             console.log(this.orders);
+            }).catch((err)=>{
+              this.orders = {};
+              console.log(err);
+            })
+          },
+          checkOutCustomer(id){
+            axios.get('/cart/checkout/'+ id).then((res)=>{
+              console.log(res.data);
+              this.getOrder(this.customer_id);
+            }).catch((err)=>{
+              console.log(err);
+            });
+          },
+          updateUserQuantity(user_id, product_id,pinfo_id,quantity) {
+            axios.post('/orders/quantity/' + user_id,{
+              'product_id': product_id,
+              'pinfo_id': pinfo_id,
+              'quantity': quantity
+            }).then((res)=>{
+              console.log(res.data);
+              this.getOrder(this.customer_id);
             }).catch((err)=>{
               console.log(err);
             })
@@ -311,7 +334,6 @@
   .dashleft{
     display: flex;
     flex-direction: column;
-    width: 50%;
     gap: 20px;
   }
 
@@ -340,6 +362,7 @@
   .buttonContainer .button2{
     background-color: green;
     border-radius: 10px;
+    cursor: pointer;
   }
 
   .totalprice{
@@ -367,8 +390,9 @@
 
   .productCon{
     cursor: pointer;
-    width: 180px;
-    height: 160px;
+    width: 280px; 
+    height: 220px;
+    padding: 5px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -378,11 +402,11 @@
   }
 
   .productCon p{
-    width: 160px;
-    white-space: nowrap;
+    margin-top: 10px;
+    width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-clamp: 1;
+    line-clamp: 2;
     font-size: 12px;
   }
 
@@ -395,7 +419,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    width: 75%;
+    flex-grow: 1;
     /* border: 1px solid red; */
     padding: 30px 10px;
   }

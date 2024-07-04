@@ -94,7 +94,7 @@
                   <!-- <td>{{ index + 1 }}</td> -->
                   <td>{{ product.id }}</td>
                   <td>
-                    <img :src="require(`../assets/img/1.webp`)" alt="Product Image" width="50" height="60" />
+                    <img :src="`http://localhost:9000/image/` + product.image" alt="Product Image" width="50" height="60" />
                   </td>
                   <td>{{ product.name }}</td>
                   <td>{{ sumCategories(product.categories) }}</td>
