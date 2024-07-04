@@ -57,7 +57,7 @@
           </router-link>
       </div>
       
-      <div class="dashboard">
+      <div class="dashboard" v-if="orders">
         <div class="wrapper1">
           <h2>Orders</h2>
           <div class="searchBox">
@@ -100,6 +100,9 @@
           </tbody>
         </table>
       </div>
+      </div>
+      <div v-else>
+        <h1>No Order have been made by Customer!</h1>
       </div>
         
       

@@ -95,7 +95,7 @@
               <div class="buttonContainer" v-if="customer_id">
                 <!-- <button class="button1">Cancel</button> -->
                  <div></div>
-                <button class="button2" v-if="customer_id" @click="checkOutCustomer(customer_id)">Add To Cart</button>
+                <button class="button2" v-if="customer_id && total!=0" @click="checkOutCustomer(customer_id)">Add To Cart</button>
               </div>
           </div>
           <div class="dashright">
@@ -206,6 +206,7 @@
             axios.get('/cart/checkout/'+ id).then((res)=>{
               console.log(res.data);
               this.getOrder(this.customer_id);
+              this.total = 0;
             }).catch((err)=>{
               console.log(err);
             });

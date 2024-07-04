@@ -8,7 +8,12 @@
         <font-awesome-icon :icon="icons.bell" class="icon" />
         <div class="account">
           <img src="../assets/img/people.png" alt="" />
-          <p v-if="user!=null" style="margin-left: 10px; display: flex;">{{ user.first_name}}</p>
+          <div class="user-dropdown" v-if="user!=null">
+              <button @click="toggleDropdown" class="username">{{ user.first_name }}</button>
+              <div v-if="showDropdown" class="dropdown-menu">
+                <button @click="logout">Log Out</button>
+              </div>
+            </div>
         </div>
       </div>
     </header>
@@ -195,5 +200,40 @@ import axios from 'axios';
     gap: 50px;
     padding: 15px ; 
     border-width: 0.1;
+  }
+  .user-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .username {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    width: 75px;
+    top: 100%;
+    left: -18px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+
+  .dropdown-menu button:hover {
+    background-color: #f1f1f1;
   }
 </style>

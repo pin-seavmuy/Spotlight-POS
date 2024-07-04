@@ -95,7 +95,7 @@
               </div>
               <div class="right">
                 <div class="formBox">
-                  <input type="text" v-model="password" placeholder="Password" required>
+                  <input type="password" v-model="password" placeholder="Password" required>
                 </div>
               </div>
             </div>
